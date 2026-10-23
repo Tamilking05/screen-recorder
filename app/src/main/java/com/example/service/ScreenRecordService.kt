@@ -133,7 +133,7 @@ class ScreenRecordService : Service() {
         val pauseResumeLabel = if (isPaused) "Resume" else "Pause"
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("ScreenFlow Recording")
+            .setContentTitle("ScreenNova Recording")
             .setContentText(statusText)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(appPendingIntent)
@@ -219,7 +219,7 @@ class ScreenRecordService : Service() {
             }, null)
 
             virtualDisplay = mediaProjection?.createVirtualDisplay(
-                "ScreenFlowDisplay",
+                "ScreenNovaDisplay",
                 width,
                 height,
                 dpi,

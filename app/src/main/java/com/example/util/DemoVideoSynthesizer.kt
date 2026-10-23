@@ -43,7 +43,7 @@ object DemoVideoSynthesizer {
 
             val movieDir = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES) ?: context.filesDir
             if (!movieDir.exists()) movieDir.mkdirs()
-            val videoFile = File(movieDir, "ScreenFlow_${System.currentTimeMillis()}.mp4")
+            val videoFile = File(movieDir, "ScreenNova_${System.currentTimeMillis()}.mp4")
 
             val mimeType = "video/avc" // H.264
             val format = MediaFormat.createVideoFormat(mimeType, width, height).apply {
@@ -126,7 +126,7 @@ object DemoVideoSynthesizer {
                 // Center main title
                 textPaint.color = Color.WHITE
                 val title = when (source) {
-                    CaptureSource.BROWSER_TAB -> "Browser Tab: Linear / Loom Workspace"
+                    CaptureSource.GAME_CAPTURE -> "Game & Stream: 60FPS High-Def Gameplay"
                     CaptureSource.FULL_SCREEN -> "Screen Capture: Full Display"
                 }
                 canvas.drawText(title, width / 2f, 320f, textPaint)

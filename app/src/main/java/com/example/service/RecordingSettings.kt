@@ -2,7 +2,7 @@ package com.example.service
 
 enum class CaptureSource(val label: String, val description: String) {
     FULL_SCREEN("Entire Screen", "Record full device display and apps"),
-    BROWSER_TAB("Browser Tab", "Record interactive web view and embedded tabs")
+    GAME_CAPTURE("Game & Stream", "High 60FPS mode for games & live streaming")
 }
 
 enum class VideoQuality(val label: String, val width: Int, val height: Int, val bitrate: Int, val fps: Int) {

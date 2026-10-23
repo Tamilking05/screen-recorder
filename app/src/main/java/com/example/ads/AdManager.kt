@@ -61,7 +61,7 @@ object AdManager {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             context,
-            AdConfig.INTERSTITIAL_AD_ID,
+            AdsConfig.currentInterstitialAdId,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
@@ -118,7 +118,7 @@ object AdManager {
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             context,
-            AdConfig.REWARDED_AD_ID,
+            AdsConfig.currentRewardedAdId,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
@@ -183,7 +183,7 @@ object AdManager {
         val adRequest = AdRequest.Builder().build()
         AppOpenAd.load(
             context,
-            AdConfig.APP_OPEN_AD_ID,
+            AdsConfig.currentAppOpenAdId,
             adRequest,
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {

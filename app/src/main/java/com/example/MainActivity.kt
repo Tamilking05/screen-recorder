@@ -28,7 +28,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.Icon
@@ -63,7 +63,7 @@ import com.example.ui.screens.LibraryScreen
 import com.example.ui.screens.SettingsScreen
 import com.example.ui.screens.VideoPreviewScreen
 import com.example.ads.AdManager
-import com.example.ui.theme.ScreenFlowTheme
+import com.example.ui.theme.ScreenNovaTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by viewModel.recorderSettings.collectAsStateWithLifecycle()
 
-            ScreenFlowTheme(darkTheme = settings.isDarkMode) {
+            ScreenNovaTheme(darkTheme = settings.isDarkMode) {
                 MainAppContent(
                     viewModel = viewModel,
                     activity = this@MainActivity
@@ -158,7 +158,7 @@ fun MainAppContent(viewModel: MainViewModel, activity: Activity) {
         }
     }
 
-    val onStartRecordingRequested = {
+    val launchRecordingIntent = {
         val neededPermissions = mutableListOf<String>()
         if (settings.isMicEnabled && ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             neededPermissions.add(Manifest.permission.RECORD_AUDIO)
@@ -181,6 +181,30 @@ fun MainAppContent(viewModel: MainViewModel, activity: Activity) {
         }
     }
 
+    // Interstitial Ad on Start Screen Recording
+    val onStartRecordingRequested = {
+        AdManager.showInterstitialAd(activity) {
+            launchRecordingIntent()
+        }
+    }
+
+    // Rewarded Ad on Start Screen Recording (VIP 4K Ultra HD)
+    val onStartWithRewardedAdRequested = {
+        AdManager.showRewardedAd(
+            activity = activity,
+            onUserEarnedReward = {
+                viewModel.unlockVip()
+                scope.launch {
+                    snackbarHostState.showSnackbar("🎉 Ultra HD 4K unlocked! Starting capture...")
+                }
+                launchRecordingIntent()
+            },
+            onDismissed = {
+                launchRecordingIntent()
+            }
+        )
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -194,14 +218,14 @@ fun MainAppContent(viewModel: MainViewModel, activity: Activity) {
                     NavigationBarItem(
                         selected = currentScreen == ScreenState.DASHBOARD,
                         onClick = { viewModel.navigateTo(ScreenState.DASHBOARD) },
-                        icon = { Icon(Icons.Default.Dashboard, contentDescription = "Dashboard") },
-                        label = { Text("Dashboard") },
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                        label = { Text("Home") },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
                             indicatorColor = MaterialTheme.colorScheme.primaryContainer
                         ),
-                        modifier = Modifier.testTag("nav_dashboard")
+                        modifier = Modifier.testTag("nav_home")
                     )
                     NavigationBarItem(
                         selected = currentScreen == ScreenState.LIBRARY,
@@ -244,8 +268,11 @@ fun MainAppContent(viewModel: MainViewModel, activity: Activity) {
                         recordings = recordings,
                         isVipUnlocked = isVipUnlocked,
                         onStartRecordingClick = onStartRecordingRequested,
+                        onStartWithRewardedAdClick = onStartWithRewardedAdRequested,
                         onInstantSampleClick = {
-                            viewModel.generateSampleVideo(context, settings.captureSource)
+                            AdManager.showInterstitialAd(activity) {
+                                viewModel.generateSampleVideo(context, settings.captureSource)
+                            }
                         },
                         onWatchRewardedAdClick = {
                             AdManager.showRewardedAd(

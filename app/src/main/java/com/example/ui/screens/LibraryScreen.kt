@@ -96,7 +96,7 @@ fun LibraryScreen(
         val matchesFilter = when (selectedFilter) {
             "All" -> true
             "Full Screen" -> recording.captureSource == "FULL_SCREEN"
-            "Tab" -> recording.captureSource == "BROWSER_TAB"
+            "Game & Stream" -> recording.captureSource == "GAME_CAPTURE"
             "HD" -> recording.height >= 720
             else -> true
         }
@@ -166,7 +166,7 @@ fun LibraryScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            listOf("All", "Full Screen", "Window", "Tab", "HD").forEach { filter ->
+            listOf("All", "Full Screen", "Game & Stream", "HD").forEach { filter ->
                 FilterChip(
                     selected = selectedFilter == filter,
                     onClick = { selectedFilter = filter },

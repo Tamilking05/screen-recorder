@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "ScreenFlow"
+rootProject.name = "ScreenNova"
 
 include(":app")

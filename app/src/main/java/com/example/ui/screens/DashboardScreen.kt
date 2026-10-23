@@ -69,9 +69,11 @@ import com.example.service.CaptureSource
 import com.example.service.RecordingSettings
 import com.example.service.ScreenRecorderManager
 import com.example.service.VideoQuality
-import com.example.service.WebcamShape
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.example.R
 import com.example.ui.components.AudioWaveformBar
-import com.example.ui.components.TabWorkspaceView
+import com.example.ui.components.GameStudioWorkspaceView
 import com.example.util.DemoVideoSynthesizer
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -82,6 +84,7 @@ fun DashboardScreen(
     recordings: List<RecordingEntity>,
     isVipUnlocked: Boolean = false,
     onStartRecordingClick: () -> Unit,
+    onStartWithRewardedAdClick: () -> Unit = {},
     onInstantSampleClick: () -> Unit,
     onWatchRewardedAdClick: () -> Unit,
     onShowInterstitialClick: () -> Unit = {},
@@ -117,30 +120,22 @@ fun DashboardScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "ScreenNova Logo",
                     modifier = Modifier
-                        .size(38.dp)
-                        .background(
-                            Brush.linearGradient(listOf(Color(0xFF6366F1), Color(0xFFEF4444))),
-                            RoundedCornerShape(10.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.RadioButtonChecked,
-                        contentDescription = "ScreenFlow Logo",
-                        tint = Color.White,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
+                        .size(42.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                )
                 Column {
                     Text(
-                        text = "ScreenFlow",
+                        text = "ScreenNova",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Black
                     )
                     Text(
-                        text = "Studio Screen Recorder",
+                        text = "Home · Studio Screen Recorder",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -168,6 +163,9 @@ fun DashboardScreen(
                 }
             }
         }
+
+        // Top Banner Ad (Google AdMob)
+        BannerAdView(modifier = Modifier.fillMaxWidth())
 
         // Stats Overview Bar
         Row(
@@ -215,41 +213,22 @@ fun DashboardScreen(
                     testTag = "source_full_screen"
                 )
                 CaptureSourceCard(
-                    title = "Browser Tab",
-                    subtitle = "Interactive tab",
-                    icon = Icons.Default.Tab,
-                    isSelected = settings.captureSource == CaptureSource.BROWSER_TAB,
+                    title = "Game & Stream",
+                    subtitle = "60FPS Gameplay",
+                    icon = Icons.Default.PlayArrow,
+                    isSelected = settings.captureSource == CaptureSource.GAME_CAPTURE,
                     onClick = {
-                        ScreenRecorderManager.updateSettings { it.copy(captureSource = CaptureSource.BROWSER_TAB) }
+                        ScreenRecorderManager.updateSettings { it.copy(captureSource = CaptureSource.GAME_CAPTURE) }
                     },
                     modifier = Modifier.weight(1f),
-                    testTag = "source_browser_tab"
+                    testTag = "source_game_capture"
                 )
             }
         }
 
-        // If Browser Tab selected, show interactive workspace
-        if (settings.captureSource == CaptureSource.BROWSER_TAB) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Interactive Browser Tab Target",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "Ready to record",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFF10B981)
-                    )
-                }
-                TabWorkspaceView()
-            }
+        // If Game & Stream selected, show high-performance gaming studio workspace
+        if (settings.captureSource == CaptureSource.GAME_CAPTURE) {
+            GameStudioWorkspaceView(modifier = Modifier.fillMaxWidth())
         }
 
         // Device Controls Card (Mic, Webcam, System Audio)
@@ -467,7 +446,7 @@ fun DashboardScreen(
             }
         }
 
-        // Primary Start Recording Button
+        // Primary Start Recording Button (Plays Interstitial Ad & Starts Recording)
         Button(
             onClick = onStartRecordingClick,
             modifier = Modifier
@@ -488,16 +467,54 @@ fun DashboardScreen(
                         .size(14.dp)
                         .background(Color.White, CircleShape)
                 )
-                Text(
-                    text = "Start Screen Recording",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Start Screen Recording",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "Standard Mode · Interstitial Ad",
+                        fontSize = 11.sp,
+                        color = Color.White.copy(alpha = 0.85f)
+                    )
+                }
             }
         }
 
-        // Instant Tab/Window Capture Demo Button
+        // 4K Ultra HD Rewarded Ad Start Option
+        if (!isVipUnlocked) {
+            OutlinedButton(
+                onClick = onStartWithRewardedAdClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .testTag("start_with_rewarded_ad_button"),
+                shape = RoundedCornerShape(14.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF10B981))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        tint = Color(0xFF10B981),
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Text(
+                        text = "Record in 4K Ultra HD (Watch Reward Ad)",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        color = if (settings.isDarkMode) Color(0xFF34D399) else Color(0xFF059669)
+                    )
+                }
+            }
+        }
+
+        // Instant Game / Screen Capture Demo Button
         OutlinedButton(
             onClick = onInstantSampleClick,
             modifier = Modifier
@@ -516,7 +533,7 @@ fun DashboardScreen(
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
-                    text = "Generate Instant 60FPS Sample Video",
+                    text = "Generate 60FPS Game/Screen Sample",
                     fontWeight = FontWeight.SemiBold
                 )
             }

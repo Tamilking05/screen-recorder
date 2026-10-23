@@ -1,31 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <!-- Monitor Outer Body -->
-    <path
-        android:fillColor="#1E293B"
-        android:strokeColor="#38BDF8"
-        android:strokeWidth="2.5"
-        android:strokeLineJoin="round"
-        android:pathData="M26,28h56c3.3,0 6,2.7 6,6v36c0,3.3 -2.7,6 -6,6h-56c-3.3,0 -6,-2.7 -6,-6v-36c0,-3.3 2.7,-6 6,-6z" />
-
-    <!-- Monitor Stand -->
-    <path
-        android:strokeColor="#38BDF8"
-        android:strokeWidth="2.5"
-        android:strokeLineCap="round"
-        android:pathData="M54,76v8M44,84h20" />
-
-    <!-- Record Dot (Glowing Red) -->
-    <path
-        android:fillColor="#EF4444"
-        android:pathData="M54,52m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0" />
-
-    <!-- Play Icon Accent inside record dot -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M52,47.5l7,4.5l-7,4.5z" />
-</vector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="66dp"
+        android:height="66dp"
+        android:drawable="@drawable/app_logo"
+        android:gravity="center" />
+</layer-list>

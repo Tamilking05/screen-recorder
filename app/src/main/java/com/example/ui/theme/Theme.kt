@@ -58,7 +58,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ScreenFlowTheme(
+fun ScreenNovaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -70,3 +70,9 @@ fun ScreenFlowTheme(
         content = content
     )
 }
+
+@Composable
+fun ScreenFlowTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) = ScreenNovaTheme(darkTheme, content)

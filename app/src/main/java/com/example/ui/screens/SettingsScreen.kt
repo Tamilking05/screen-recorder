@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.activity.compose.BackHandler
+import com.example.ads.BannerAdView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -239,7 +240,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Used by ScreenFlow", fontWeight = FontWeight.SemiBold)
+                        Text("Used by ScreenNova", fontWeight = FontWeight.SemiBold)
                         Text("$totalRecordingsCount videos ($mbStr)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Button(
@@ -324,6 +325,9 @@ fun SettingsScreen(
                 )
             }
 
+            // Google AdMob Banner Ad
+            BannerAdView(modifier = Modifier.fillMaxWidth())
+
             // Privacy & Security Pledge
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
@@ -344,7 +348,7 @@ fun SettingsScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("100% On-Device Privacy", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                         Text(
-                            text = "ScreenFlow encodes all videos directly onto your local device hardware. No videos, audio, or metadata are ever transmitted to an external server.",
+                            text = "ScreenNova encodes all videos directly onto your local device hardware. No videos, audio, or metadata are ever transmitted to an external server.",
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 16.sp

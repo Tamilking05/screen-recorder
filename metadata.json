@@ -1,6 +1,6 @@
 {
-  "name": "ScreenFlow",
-  "description": "Modern screen recording app with webcam overlay, audio capture, live preview, and recordings library.",
+  "name": "ScreenNova",
+  "description": "ScreenNova - Modern screen recording app with webcam overlay, audio capture, live preview, and recordings library.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
